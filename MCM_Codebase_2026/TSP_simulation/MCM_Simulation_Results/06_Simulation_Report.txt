@@ -1,0 +1,20 @@
+
+% Table: Logistics Cost & Route Comparison
+\begin{table}[htbp]
+  \centering
+  \caption{Performance Comparison of Logistics Protocols under Meteorological Variations}
+  \label{tab:tsp_comparison}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Metric} & \textbf{Calm Phase} & \textbf{Storm Phase} \\
+    \midrule
+    \textbf{Total Cost} & 99.35 & 119.14 \\
+    \textbf{Cost Increase} & - & +19.78 (19.9\%) \\
+    \midrule
+    \textbf{Route Sequence} & \multicolumn{2}{l}{\parbox{10cm}{
+      \textbf{Calm}: Isl_0803 $\to$ Isl_0806 $\to$ Isl_0926 $\to$ Isl_0971 $\to$ Isl_0072 $\to$ ... \\
+      \textbf{Storm}: Isl_0803 $\to$ Isl_0806 $\to$ Isl_0926 $\to$ Isl_0971 $\to$ Isl_0072 $\to$ ...
+    }} \\
+    \bottomrule
+  \end{tabular}
+\end{table}

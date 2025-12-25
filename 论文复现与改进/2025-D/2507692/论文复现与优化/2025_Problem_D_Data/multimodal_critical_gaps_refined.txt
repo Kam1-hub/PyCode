@@ -1,0 +1,7 @@
+
+【数据集说明：multimodal_critical_gaps_refined.csv】
+1. 识别逻辑：在任务四的基础上，通过 85% 分位数的优先级评分进行二次过滤，定位“极高风险”盲区。
+2. 核心字段：
+   - is_vulnerability_island: 标记为系统的关键脆弱孤岛。
+   - nearest_rail_x/y: 建议紧急摆渡线（Emergency Shuttle）的终点坐标。
+3. 政策用途：直接支撑《市长备忘录》中的“摆渡车部署计划”。

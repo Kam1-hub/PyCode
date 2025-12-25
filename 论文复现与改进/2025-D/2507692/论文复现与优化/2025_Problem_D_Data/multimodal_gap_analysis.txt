@@ -1,0 +1,7 @@
+
+--- 数据集说明文档: multimodal_gap_analysis.csv ---
+1. 核心改进: 该文件通过引入 dist_to_rail (轨道距离) 解决了原论文 2507692 对模式连接效率量化不足的缺陷。
+2. 关键字段:
+   - multimodal_connected: 逻辑布尔值，定义站点是否处于 0.0015 度的轨道辐射圈内。
+   - is_critical_gap: 识别出的“脆弱孤岛”，即灾后需求高但缺乏多模态支撑的节点。
+3. 应用价值: 该数据为 Model III 提出的 Integrated Multimodal Transport Model 提供了直接的选址建议。

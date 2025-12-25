@@ -1,0 +1,201 @@
+🧱 第一部分：V7.0 类生产指令 (The Factory Meta-Prompt)
+
+用途：发送给弱 AI，让它生成底层的 Eval_Solver_Capsule 类。
+
+核心逻辑：集成了双重数据预处理（针对熵权和TOPSIS的不同需求）、多重赋权、TOPSIS 核心计算、障碍度诊断、敏感性分析五大模块。
+
+请直接复制以下内容发送给 AI：
+
+【系统指令：构建 V7.0 综合评价算法胶囊】
+
+我正在构建美赛专用代码库。请参照 ODE_Solver_Capsule (V7.0) 的**“运行即交付”**标准，编写一个名为 Eval_Solver_Capsule 的 Python 类。
+
+目标领域：综合评价 (Comprehensive Evaluation)。
+
+核心库：pandas, numpy, matplotlib, seaborn, scipy。
+
+V7.0 架构设计规范 (必须严格遵守)：
+
+1. 构造与反向握手 (Setup)
+
+__init__(self, name): 初始化 Results_{name}_{timestamp} 输出目录。
+
+generate_handshake(df_dict): (关键) 打印 API 清单和数据摘要。
+
+陷阱提示: 主动警告用户：“极大型/极小型指标方向必须准确”、“熵权法需处理零值/负值”、“TOPSIS与熵权法的归一化方式不同”。
+
+2. 智能预处理 (Smart Preprocessing)
+
+preprocess(direction_dict):
+
+功能: 根据字典（如 {'Cost': 'min', 'Profit': 'max', 'PH': 'mid'}）对数据进行正向化处理。
+
+中间型处理: 对 'mid' 类型，使用 $1 - \frac{|x - x_{best}|}{M}$ 公式。
+
+双重归一化 (Math Trap Defense):
+
+Internal_A (For Entropy): 使用 Min-Max 归一化，并统一 $+0.001$ (防止 ln(0) 崩溃)。
+
+Internal_B (For TOPSIS): 使用 向量归一化 ($x_{ij} / \sqrt{\sum x_{ij}^2}$)。
+
+3. 核心计算 (Core Calculation)
+
+compute_weights(method='entropy', manual_weights=None, alpha=0.5):
+
+Entropy: 使用熵权法自动计算客观权重。
+
+Combined: 如果提供 manual_weights (如 AHP 结果)，计算综合权重 $W = \alpha W_{entropy} + (1-\alpha) W_{manual}$。
+
+run_topsis():
+
+基于综合权重和 Internal_B 数据，计算正/负理想解距离 ($D^+, D^-$)。
+
+计算得分 $C_i = \frac{D^-}{D^+ + D^-}$。
+
+将结果 (Score, Rank) 拼接到原始数据表中。
+
+4. 深度分析 (Deep Analysis - O奖核武器)
+
+analyze_obstacle_degree(top_n=3): (障碍度诊断 - 必须实现)
+
+模型: 计算每个指标对排名的“拖后腿”程度。公式：$O_{ij} = \frac{w_j (1-z_{ij})}{\sum w_j (1-z_{ij})}$，其中 $z_{ij}$ 为归一化值。
+
+输出: 打印排名靠后对象的 Top 3 障碍因子（即哪几个指标表现最差）。
+
+analyze_sensitivity(perturb_range=0.2, runs=100): (排名反转测试)
+
+算法 (Monte Carlo): 让权重向量在 $\pm 20\%$ 范围内随机波动 100 次。
+
+统计: 记录前 5 名排名的变化情况。
+
+可视化: 绘制 排名箱线图 (Rank Boxplot)，展示名次的波动范围。如果箱子很短，说明排名稳健。
+
+5. 顶级可视化 (Visualization)
+
+plot_radar(top_k=5):
+
+绘制前 5 名对象的雷达图 (Radar Chart)，展示其优势分布。
+
+注意: 必须闭合雷达图的线条。
+
+plot_bar_scores(): 绘制得分柱状图，带有平均线。
+
+6. 交付 (Delivery)
+
+export_results():
+
+自动保存 Evaluation_Result.xlsx (包含原始数据、权重、得分、排名、主要障碍因子)。
+
+保存所有 .svg 图片。
+
+生成 Report.md: 自动撰写文字报告（“排名第一的是 X，其优势在于...；排名不稳定的是 Y...”）。
+
+生成 Weights.tex: 权重的 LaTeX 表格代码。
+
+代码要求:
+
+必须使用 seaborn 或 scienceplots (try-except) 美化图表。
+
+必须包含 audit() 方法检查数据是否包含 NaN 或无穷大。
+
+输出完整的 Python Class 代码。
+
+---以上为第一部分
+
+下面是第二部分内容 紧密结合刚刚写好的类 完善下列自然语言工作流
+
+📜 第二部分：指挥官自然语言工作流 (Commander's Manual)
+
+这是你操作评价模型的SOP (标准作业程序)。V7.0 强调的是**“先诊断，后评价，再归因”**。
+
+Phase 0: 侦察与定义 (Recon)
+
+
+
+动作：读取 Excel -> 运行 generate_handshake。
+
+决策：
+
+指标定性：这是人类唯一必须做的事。明确哪个是 Benefit (max)，哪个是 Cost (min)，哪个是 Intermediate (mid)。
+
+权重策略：是完全相信数据（熵权），还是你需要强行干预（比如题目背景是“环保优先”，你就必须手动调高环保指标的权重，不能全信熵权法）。
+
+Phase 1: 运算与干预 (Execution)
+
+
+
+动作：运行 preprocess -> compute_weights -> run_topsis。
+
+观察：看一眼权重分布。如果熵权法给某个无关紧要的指标（比如“员工人数”）极高的权重，说明数据方差有问题，此时必须介入，使用 manual_weights 修正。
+
+Phase 2: 深度诊断 (Diagnosis - O奖核心)
+
+
+
+动作：运行 analyze_obstacle_degree。
+
+洞察：不要只写“A 是第一名”。要写“A 之所以是第一名，是因为它在权重最高的 X 指标上表现完美；而 B 屈居第二，主要的障碍因子是 Y 指标偏低（障碍度 40%）。” —— 这就是障碍度分析的作用。
+
+Phase 3: 稳健性辩护 (Defense)
+
+
+
+动作：运行 analyze_sensitivity。
+
+剧本：“评委可能会问，你的权重是不是凑出来的？我展示这幅排名箱线图，证明即使权重波动 20%，前三名依然稳如泰山。”
+
+Phase 4: 交付 (Harvest)
+
+
+
+动作：plot_radar -> export_results。
+
+素材：雷达图放正文展示优势，箱线图放模型检验章节展示稳健性。
+
+---以上为第二部分
+
+结合上述自然语言工作流 结合上述工作流 给出从phase0.1（这一部分是在本地编译的 目的是输出握手程序）到（从这里开始是与ai交互的工作流）phase3 也就是到工作完成的部分
+
+
+
+仿照下列提示词：（我给出的phase阶段编排可能和上述最终的自然语言工作流不一致 不过不重要 你只需要理解大概形式就可以 一切请结合刚刚完善的自然语言工作流为准）
+
+
+
+🤖 第三部分：AI 交互工作流 (RPG Prompts)
+
+请按顺序把这些 Prompt 发给加载了 V7.0 类的 AI。
+
+
+
+1. Phase 1: 数据注入与建模 (Prompt_Eval_Init.txt)
+
+Markdown
+
+
+
+【系统指令：评价模型初始化】1. **环境**: - 我已加载 `Eval_Solver_Capsule` (V7.0)。 - 原始数据在 DataFrame `df` 中。 - 索引列（评价对象名称）是 `[Name_Col]`。2. **任务**: - 实例化: `solver = Eval_Solver_Capsule(name='Impact_Evaluation')`。 - 加载数据: `solver.set_data(df, index_col='[Name_Col]')`。 - **预处理配置 (关键)**: - 定义方向字典: `d = {'Price': 'min', 'Quality': 'max', 'PH': 'mid'}` (注意 PH 最优值 7.0)。 - 调用 `solver.preprocess(direction_dict=d)`。 - 审计: `solver.audit()`。3. **要求**: - 检查是否存在中间型指标，如有请先手动处理再传入。 - 确保预处理后的数据没有负数（为了熵权法）。
+
+2. Phase 2: 核心计算与诊断 (Prompt_Eval_Run.txt)
+
+Markdown
+
+
+
+【系统指令：计算与障碍度诊断】
+
+
+
+请执行核心评价流程：1. **赋权与计算**: - 调用 `solver.compute_weights(method='entropy')`。 - **人工干预 (可选)**: 如果需要混合权重，请在注释中提示我如何传入 `manual_weights` 和 `alpha`。 - 调用 `solver.run_topsis()`。2. **输出解读**: - 请打印计算出的 **客观权重**。 - 请打印 **综合排名前 5** 的对象。 - **深度诊断**: 调用 `solver.analyze_obstacle_degree(top_n=3)`。请在回复中告诉我，第二名和第三名主要输在哪里？（即主要的障碍因子是什么）。
+
+3. Phase 3: 灵敏度与交付 (Prompt_Eval_Export.txt)
+
+Markdown
+
+
+
+【系统指令：稳健性检验与交付】1. **灵敏度分析 (Rank Reversal Test)**: - 验证排名的可靠性。 - `solver.analyze_sensitivity(perturbation=0.2, runs=100)`。 - **绘图**: 生成排名箱线图。如果箱体很短，说明排名非常可信。2. **可视化**: - `solver.plot_radar(top_k=3)` (对比前三名与平均水平)。3. **交付**: - `solver.export_results()`。 - 确认生成了 `Evaluation_Result.xlsx`, `Sensitivity_Boxplot.svg`, `Radar.svg`, `Rep
+
+---以上为第三部分
+
+注意 以上提示词仅仅是针对LP问题的 对于其他问题 请具体回答 上述内容的作用是模板性的

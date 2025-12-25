@@ -1,0 +1,7 @@
+数据集名称: impact_system_performance_delta.csv
+描述: 该表量化了大桥倒塌前后全路网宏观运行效率的损失。
+字段说明:
+- Total_System_Travel_Time_TSTT: 全社会总旅行耗时（反映经济成本）。
+- Total_Vehicle_Distance_VMT: 总行驶里程（反映碳排放与燃油成本）。
+- Delta_Pct: 变化百分比。这是论文中衡量“系统冲击烈度”的最核心指标。
+结论建议: 若 TSTT 增长显著，说明大桥作为枢纽对全城交通具有关键支撑作用。

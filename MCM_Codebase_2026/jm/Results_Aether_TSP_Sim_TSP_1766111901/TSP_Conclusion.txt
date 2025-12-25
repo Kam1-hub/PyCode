@@ -1,0 +1,3 @@
+Cost Increase: 32.63%
+Route Changed: False
+Status: SIGNIFICANT

@@ -1,0 +1,9 @@
+数据集名称: analysis_highway_performance.csv
+描述: 统计不同行政等级道路在交通压力下的表现。
+分析重点:
+- 观察 Motorway (高速) 的 Avg_VC 是否普遍超过 1.0。
+- 观察 Residential (住宅区) 道路是否出现了异常高流量（避堵绕行导致）。
+字段说明:
+- Count: 该等级道路的总路段数。
+- Total_Flow: 该等级道路承担的总交通负荷。
+- Avg_VC: 该等级道路的平均拥堵程度。

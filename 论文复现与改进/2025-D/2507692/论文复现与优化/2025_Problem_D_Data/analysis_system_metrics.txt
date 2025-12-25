@@ -1,0 +1,9 @@
+数据集名称: analysis_system_metrics.csv
+描述: 该表记录了路网在用户均衡状态下的宏观表现指标。
+字段说明:
+- Total_System_Travel_Time_UE: 系统总旅行耗时，反映全社会总交通成本。
+- Ideal_System_Travel_Time_AON: 理想状态（无拥堵）下的总耗时。
+- Efficiency_Loss_Percent: 效率损失百分比。该值越高，说明桥梁倒塌后的绕行造成的社会时间成本越高。
+- Total_Vehicle_Distance_VMT: 总行驶里程。
+- Flow_Weighted_Avg_VC: 流量加权后的平均饱和度。比简单平均值更真实地反映驾驶员的感受。
+- Network_Utilization_Rate: 路网中有流量通过的路段比例。

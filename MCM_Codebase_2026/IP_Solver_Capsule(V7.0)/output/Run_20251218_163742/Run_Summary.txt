@@ -1,0 +1,6 @@
+=== GreenGrid Optimization Summary ===
+Timestamp: 20251218_163742
+Status: Infeasible
+Objective (Total Cost): 4,257.60
+Active Sites: 15
+Total Routes: 37

@@ -1,0 +1,8 @@
+数据集名称: spatial_flow_gainers.csv
+描述: 记录由于大桥倒塌，流量被迫转移并导致流量净增长的路段。
+核心字段说明:
+- mid_x, mid_y: 路段中心点经纬度。用于在论文中绘制流量变化热力图 。
+- flow_diff_abs: 流量绝对增量 (Post - Pre)。该值越大，说明该路段承担的绕行压力越大。
+分析重点:
+- 观察 I-95 (Fort McHenry Tunnel) 和 I-895 (Harbor Tunnel) 的流量增长。
+- 关注流量是否向市区普通道路（如 Eastern Avenue）发生空间溢出。
