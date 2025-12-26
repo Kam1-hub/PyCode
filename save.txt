@@ -1,0 +1,6 @@
+逐行执行：
+
+cd /d D:\PyCode
+git add .
+git commit -m "keywords:"
+git push
